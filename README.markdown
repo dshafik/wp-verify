@@ -16,3 +16,12 @@ _wp-verify_ works by following these steps:
 
 *Additionally* I hope to allow verification of a local set of files against the
 server too, for custom modifications, plugins and themes.
+
+## Libraries ##
+
+_wp-verify_ uses several libraries to complete it's work.
+
+* PEAR Archive_TAR (http://pear.php.net/Archive_TAR)
+	* The git repo includes a hacked version with no PEAR dependencies should you not have Archive_TAR in your path. It is part of the base pear install though, I would be surprised if you needed it.
+* PHP CLI Framework (http://cliframework.com/)
+	* This basic CLI framework does some of the boring CLI stuff

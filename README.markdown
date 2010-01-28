@@ -17,6 +17,20 @@ _wp-verify_ works by following these steps:
 *Additionally* I hope to allow verification of a local set of files against the
 server too, for custom modifications, plugins and themes.
 
+## Example ##
+
+	./wp-verify.php -v2.9.1 -fftp.example.org -uUSERNAME -pPASSWORD -w/web/content
+	Retrieving Wordpress 2.9.1...... done!
+	Verifying build...... verified!
+	Unpacking Wordpress...... complete!
+	Generating MD5sums................................................................................. done!
+	Testing remote connection...... success!
+	Comparing remote files................................................................................. complete!
+	
+	   Failed files 
+	 | Filename  | 
+	 | index.php | 
+
 ## Libraries ##
 
 _wp-verify_ uses several libraries to complete it's work.

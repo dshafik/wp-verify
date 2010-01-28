@@ -28,7 +28,7 @@ CLI::seto(
 }
 */
 
-if (!CLI::geto('d')) {
+if (!$data_dir = CLI::geto('d')) {
     $data_dir = realpath(sys_get_temp_dir());
 }
 
@@ -135,10 +135,6 @@ foreach (array_keys($md5sums) as $file) {
         echo '.';
     }
 
-    if (basename($file) != 'index.php') {
-        continue;
-    }
-    
     ftp_get($fp, $remote_file_dir . DIRECTORY_SEPARATOR . basename($file), $wordpress . $file, FTP_BINARY);
     if (md5_file($remote_file_dir . DIRECTORY_SEPARATOR . basename($file)) != $md5sums[$file]) {
         $failed[] = $file;

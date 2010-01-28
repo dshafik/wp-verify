@@ -22,11 +22,10 @@ CLI::seto(
     )
 );
 
-/*if (!CLI::geto('f') || !CLI::geto('v')) {
+if (!CLI::geto('f') || !CLI::geto('v') || !CLI::geto('u') || !CLI::geto('p') || !CLI::geto('w')) {
     CLI::gethelp();
     exit(-1);
 }
-*/
 
 if (!$data_dir = CLI::geto('d')) {
     $data_dir = realpath(sys_get_temp_dir());

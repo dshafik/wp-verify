@@ -241,6 +241,8 @@ mkdir($remote_file_dir);
 
 $failed = array();
 $i = 0;
+$fp = ftp_connect($server, $port);
+ftp_login($fp, $user, $password);
 foreach (array_keys($md5sums) as $file) {
     $i++;
 
@@ -248,16 +250,17 @@ foreach (array_keys($md5sums) as $file) {
 		echo '.';
 	}
 
-    //ftp_get($fp, $remote_file_dir . DIRECTORY_SEPARATOR . basename($file), $wordpress . $file, FTP_BINARY);
-	$dsn = "ftp://$user:$password@$server$wordpress$file";
-	file_get_contents($dsn);
-	$md5 = md5();
+    ftp_get($fp, $remote_file_dir . DIRECTORY_SEPARATOR . basename($file), $wordpress . $file, FTP_BINARY);
+	//$dsn = "ftp://$user:$password@$server$wordpress$file";
+	//file_get_contents($dsn);
+	//$md5 = md5();
 
-    if (/*md5_file($remote_file_dir . DIRECTORY_SEPARATOR . basename($file))*/ $md5 != $md5sums[$file]) {
+    if (md5_file($remote_file_dir . DIRECTORY_SEPARATOR . basename($file)) != $md5sums[$file]) {
         $failed[] = $file;
     }
 }
 echo "... complete!" . PHP_EOL;
+ftp_close($fp);
 
 if ($failed) {
     echo CLI::theme_table(array($failed), "Filename", "Failed files");

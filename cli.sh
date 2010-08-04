@@ -375,6 +375,27 @@ class CLI {
     echo $message . " \n";
     return fgets(STDIN, 128);
   }
+
+  /**
+   * Prompt user for password input
+   *
+   * @param string $message
+   *
+   * @return string
+   *	Response.
+   *
+   * @access public
+   *
+   * @since Version 0.2-dev
+   */
+  static public function password_prompt($message) {
+	echo $message .' ';
+	system('stty -echo');
+	$password = trim(fgets(STDIN));
+	system('stty echo');
+	echo "\n";
+	return $password;
+  }
                                                   
   /**
    * Output an error message, halting the program.

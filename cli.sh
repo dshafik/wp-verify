@@ -10,14 +10,14 @@
  * @link http://cliframework.com  
  */
 
-/**
- * Bullet Lists.
- */
-define('CLI_LIST_BULLET', 1);
-define('CLI_LIST_NUMERIC', 2);
-define('CLI_LIST_ALPHA', 3);
-
 class CLI {
+	/**
+	 * Bullet Lists.
+	 */
+	const LIST_BULLET = 1;
+	const LIST_NUMERIC = 2;
+	const LIST_ALPHA = 3;
+	
 	/**
 	 * Version.
 	 * 
@@ -29,28 +29,19 @@ class CLI {
 	 * Options.
 	 *
 	 * @var array
-	 *
 	 * @access public
-	 *
 	 * @since Version 0.1
 	 */
 	static public $o;
+
 	/**
 	 * Option descriptions.
 	 * 
 	 * @var array 
-	 * 
 	 * @access public  
-	 *  
 	 * @since Version 0.1
 	 */
 	static public $od;
-
-	/* -----------------------------------------------------------------
-
-	  Methods
-
-	  ------------------------------------------------------------------ */
 
 	/**
 	 * Set options.
@@ -61,11 +52,8 @@ class CLI {
 	 *     - Requires value: 'd:'
 	 *     - Optional value: 'h::'
 	 *         - Note: only supported in PHP 5.3.x and greater
-	 *
 	 * @access public
-	 *
 	 * @since Version 0.1
-	 *
 	 * @todo support long options
 	 * @todo format help better
 	 */
@@ -86,7 +74,6 @@ class CLI {
 	 *   - Option not set or value is not present: FALSE 
 	 * 
 	 * @access public 
-	 * 
 	 * @since Version 0.1
 	 */
 	static public function geto($option) {
@@ -101,15 +88,11 @@ class CLI {
 	 * Get an argument value by index.
 	 *
 	 * @param int $i
-	 *
 	 * @return mixed
 	 *   - success: String
 	 *   - failure: FALSE
-	 *
 	 * @access public
-	 *
 	 * @since Version 0.1
-	 *
 	 * @todo check if the argument is an option, or how to handle this better
 	 */
 	static public function getv($i) {
@@ -121,9 +104,7 @@ class CLI {
 	 * Display help information.
 	 *
 	 * @access public
-	 *
 	 * @since Version 0.1
-	 *
 	 * @todo: hook for additional help, or global
 	 * @todo: support php 5.30's :: optional values
 	 * @todo: make a spacer theme, theme_list, theme_table, theme_spacer
@@ -160,31 +141,23 @@ class CLI {
 	 * Table output.
 	 * 
 	 * @param array $rows
-	 * 
 	 * @param array $headers 
 	 *   (optional) Column headers.
-	 * 
 	 * @param string $caption
 	 *   (optional) Table caption.
-	 * 
 	 * @param $pad_type_headers
 	 *   (optional) Padding method.
 	 *   - STR_PAD_LEFT
 	 *   - STR_PAD_RIGHT
 	 *   - STR_PAD_BOTH
-	 * 
 	 * @param $pad_type_cells
 	 *   (optional) Padding method.  
 	 *   - STR_PAD_LEFT
 	 *   - STR_PAD_RIGHT
 	 *   - STR_PAD_BOTH
-	 * 
 	 * @return string
-	 * 
 	 * @access public 
-	 * 
 	 * @since Version 0.1
-	 * 
 	 * @todo support and detect colspans
 	 */
 	static public function theme_table($rows, $headers = array(), $caption = NULL, $pad_type_headers = STR_PAD_BOTH, $pad_type_cells = STR_PAD_RIGHT) {
@@ -241,11 +214,8 @@ class CLI {
 	 *
 	 * @param string $caption
 	 *   (optional) Spacer caption.
-	 *
 	 * @return string
-	 *
 	 * @access public
-	 *
 	 * @since Version 0.1
 	 */
 	static public function theme_spacer($caption = '') {
@@ -257,23 +227,18 @@ class CLI {
 	 * List.
 	 *
 	 * @param array $items
-	 *
 	 * @param string $caption
 	 *   (optional) List caption.
-	 *
 	 * @param int $list_type
 	 *   (optional) List style type.
-	 *      - CLI_LIST_ALPHA
-	 *      - CLI_LIST_BULLET
-	 *      - CLI_LIST_NUMERIC
-	 *
+	 *      - CLI::LIST_ALPHA
+	 *      - CLI::LIST_BULLET
+	 *      - CLI::LIST_NUMERIC
 	 * @return string
-	 *
 	 * @access public
-	 *
 	 * @since Version 0.1
 	 */
-	static public function theme_list($items, $caption = NULL, $list_type = CLI_LIST_BULLET) {
+	static public function theme_list($items, $caption = NULL, $list_type = self::LIST_BULLET) {
 		$output = "\n";
 
 		// Caption
@@ -294,12 +259,10 @@ class CLI {
 	 * a item list formated via $list_type
 	 *
 	 * @see self::item_list
-	 *
 	 * @access protected
-	 *
 	 * @since Version 0.1
 	 */
-	static protected function _list($items, $list_type = CLI_LIST_BULLET, $depth = 0) {
+	static protected function _list($items, $list_type = self::LIST_BULLET, $depth = 0) {
 		static $list_id = 0;
 		$output = '';
 		$list_id++;
@@ -323,31 +286,29 @@ class CLI {
 	 * the $list_type pram
 	 * 
 	 * @see self::_list
-	 * 
 	 * @access protected 
-	 * 
 	 * @since Version 0.1
 	 */
-	static protected function _list_type($i, $list_id, $list_type = CLI_LIST_BULLET, $depth = 0) {
+	static protected function _list_type($i, $list_id, $list_type = self::LIST_BULLET, $depth = 0) {
 		static $lists;
 
 		$lists[$list_id][$depth]++;
 
 		switch ($list_type) {
-			case CLI_LIST_ALPHA:
+			case self::LIST_ALPHA:
 				$output = !$depth ? chr(96 + (int) $lists[$list_id][$depth]) : '-';
 				break;
 
-			case CLI_LIST_BULLET:
+			case self::LIST_BULLET:
 				$output = '-';
 				break;
 
-			case CLI_LIST_NUMERIC:
+			case self::LIST_NUMERIC:
 				$output = !$depth ? (int) $lists[$list_id][$depth] : chr(96 + (int) $lists[$list_id][$depth]);
 				break;
 		}
 
-		if ($list_type != CLI_LIST_BULLET) {
+		if ($list_type != self::LIST_BULLET) {
 			$output .= '.';
 		}
 
@@ -358,12 +319,8 @@ class CLI {
 	 * Prompt user input.
 	 * 
 	 * @param string $message   
-	 * 
-	 * @return string
-	 *   Response.
-	 * 
+	 * @return string Response.
 	 * @access public 
-	 * 
 	 * @since Version 0.1
 	 */
 	static public function prompt($message) {
@@ -375,12 +332,8 @@ class CLI {
 	 * Prompt user for password input
 	 *
 	 * @param string $message
-	 *
-	 * @return string
-	 * 	Response.
-	 *
+	 * @return string Response.
 	 * @access public
-	 *
 	 * @since Version 0.2-dev
 	 */
 	static public function password_prompt($message) {
@@ -396,11 +349,8 @@ class CLI {
 	 * Output an error message, halting the program.
 	 *
 	 * @param string $message
-	 *
 	 * @access public
-	 *
 	 * @since Version 0.1
-	 *
 	 * @todo: support errorno's
 	 * @todo: errorno map
 	 */
@@ -413,9 +363,7 @@ class CLI {
 	 * Debug.
 	 *
 	 * @param mixed $var
-	 *
 	 * @access public
-	 *
 	 * @since Version 0.1
 	 */
 	static public function dbg($var) {

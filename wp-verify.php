@@ -256,14 +256,14 @@ foreach (array_keys($md5sums) as $file) {
 	//$md5 = md5();
 
     if (md5_file($remote_file_dir . DIRECTORY_SEPARATOR . basename($file)) != $md5sums[$file]) {
-        $failed[] = $file;
+        $failed[] = array($file);
     }
 }
 echo "... complete!" . PHP_EOL;
 ftp_close($fp);
 
 if ($failed) {
-    echo CLI::theme_table(array($failed), "Filename", "Failed files");
+    echo CLI::theme_table($failed, array("Filename"), "Failed files");
 } else {
     echo "Wordpress install is pristine!" . PHP_EOL;
 }

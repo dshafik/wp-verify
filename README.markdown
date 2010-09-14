@@ -35,7 +35,6 @@ server too, for custom modifications, plugins and themes.
 
 _wp-verify_ uses several libraries to complete it's work.
 
-* PEAR Archive_TAR (http://pear.php.net/Archive_TAR)
-	* The git repo includes a hacked version with no PEAR dependencies should you not have Archive_TAR in your path. It is part of the base pear install though, I would be surprised if you needed it.
+* Devin Doucette's Archive Classes
 * PHP CLI Framework (http://cliframework.com/)
 	* This basic CLI framework does some of the boring CLI stuff

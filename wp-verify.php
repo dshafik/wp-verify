@@ -1,6 +1,7 @@
 #!/usr/bin/php
 <?php
 error_reporting(0);
+set_include_path('.' . PATH_SEPARATOR . dirname(__FILE__) . PATH_SEPARATOR . get_include_path());
 require_once 'cli.sh';
 // Try to include system PEAR Archive_TAR
 @include 'Archive/TAR.php';
@@ -16,10 +17,11 @@ CLI::seto(
         'f:' => 'FTP(s) Server address (i.e. ftp.example.org)',
         'u:' => 'FTP Username',
         'p::' => 'FTP Password',
-        'P:' => 'FTP Post (default: 21)',
+        'P:' => 'FTP Port (default: 21)',
         'w:' => 'Wordpress Path on remote host',
         'v:' => 'Wordpress Version',
 		'l' => 'Check Plugins',
+		'i:' => 'Diff to file',
     )
 );
 
@@ -31,6 +33,7 @@ if (!CLI::geto('f') || !CLI::geto('v') || !CLI::geto('u') || !CLI::geto('p') || 
 if (!$data_dir = CLI::geto('d')) {
     $data_dir = realpath(sys_get_temp_dir()) .DIRECTORY_SEPARATOR. uniqid('wp-verify-');
 	mkdir($data_dir);
+	echo "Created temporary directory: " .$data_dir . PHP_EOL;
 } elseif (!file_exists($data_dir)) {
 	$result = @mkdir($data_dir);
 	if (!$result) {
@@ -208,10 +211,18 @@ try {
 }
 
 $i = 0;
+
+$ignored_extensions = array('jpg', 'gif', 'png', 'pdf', 'swf', 'pot', 'txt', 'html', 'css', 'htm', 'zip');
+
 foreach ($wp as $file) {
     if (!$file->isFile() || basename($file->getFileName()) == 'wp-config-sample.php') {
         continue;
     }
+	
+	$ext = pathinfo($file->getFileName(), PATHINFO_EXTENSION);
+	if (in_array($ext, $ignored_extensions)) {
+		continue;
+	}
 
     $i++;
     if ($i % 10 == 0) {
@@ -230,7 +241,7 @@ foreach ($wp as $file) {
 }
 echo "... done!" . PHP_EOL;
 
-echo "Comparing remote files...";
+echo "Comparing " .sizeof($md5sums). " remote files...";
 $i = 0;
 if (file_exists($remote_file_dir)) {
     echo "... failed! (Temp directory already exist: $remote_file_dir)";
@@ -257,6 +268,14 @@ foreach (array_keys($md5sums) as $file) {
 
     if (md5_file($remote_file_dir . DIRECTORY_SEPARATOR . basename($file)) != $md5sums[$file]) {
         $failed[] = array($file);
+		$diff = CLI::geto('i');
+		if ($diff) {
+			$remote = $remote_file_dir . DIRECTORY_SEPARATOR . basename($file);
+			$original = $file_dir . DIRECTORY_SEPARATOR . 'wordpress' .DIRECTORY_SEPARATOR. $file;
+			if (file_exists($remote) && file_exists($original)) {
+				`diff -u $original $remote >> $diff`;
+			}
+		}
     }
 }
 echo "... complete!" . PHP_EOL;

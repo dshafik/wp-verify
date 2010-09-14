@@ -14,8 +14,8 @@ _wp-verify_ works by following these steps:
 5. [Optional] Download a list of installed plugins
 6. Download the original sources for each plugin
 7. Build an array of an md5sum of every file in the release
-8  [Optional] Build an array of an md5sum of every file in the plugins
-8. Download each file from the FTP(S) and compare it's md5sum to that of the original
+8.  [Optional] Build an array of an md5sum of every file in the plugins
+9. Download each file from the FTP(S) and compare it's md5sum to that of the original
 
 *Additionally* I hope to allow verification of a local set of files against the
 server too, for custom modifications, plugins and themes.
